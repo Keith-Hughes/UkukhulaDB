@@ -1,8 +1,19 @@
+--USE master
+--GO
+
+--CREATE DATABASE UkukhulaDB
+--GO
+
+--USE UkukhulaDB
+--GO
+
 CREATE TABLE [dbo].[Status](
 	[ID] [int] PRIMARY KEY IDENTITY(1, 1) NOT NULL,
 	[Type] [varchar](20) NOT NULL
 )
 GO
+
+
 
 CREATE TABLE [dbo].[Provinces] (
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
@@ -38,9 +49,11 @@ GO
 CREATE TABLE [dbo].[University](
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
     [Name] [varchar](120),
-    [ProvinceID] [int] FOREIGN KEY REFERENCES [dbo].[Provinces](ID)
+    [ProvinceID] [int] FOREIGN KEY REFERENCES [dbo].[Provinces](ID),
+    [Status] [CHAR](8) DEFAULT 'INACTIVE'
 )
 GO
+
 
 CREATE TABLE [dbo].[UniversityFundRequest](
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
@@ -55,7 +68,7 @@ GO
 CREATE TABLE [dbo].[BBDAllocation](
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
     [Budget] [money] NOT NULL,
-    [DateCreated] [date] DEFAULT GETDATE(),
+    [DateCreated] [date] DEFAULT GETDATE() ,
 )
 GO
 
@@ -67,6 +80,8 @@ CREATE TABLE [dbo].[UniversityFundAllocation](
     [BBDAllocationID] [int] FOREIGN KEY REFERENCES [dbo].[BBDAllocation](ID)
 )
 GO
+
+
 
 CREATE TABLE [dbo].[User](
     [ID] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -98,7 +113,7 @@ CREATE TABLE [dbo].[Student] (
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY,
     [IDNumber] [char](13) NOT NULL,
     [BirthDate] [date] NOT NULL,
-    [Age] AS (CONVERT(tinyint, DATEDIFF(DAY, [BirthDate], GETDATE()) / 365.25)) ,
+    [Age] AS (CONVERT(tinyint, DATEDIFF(DAY, [BirthDate], GETDATE()) / 365.25)),
     [GenderID] [INT] FOREIGN KEY REFERENCES [dbo].[Gender](ID),
     [UserID] [int] FOREIGN KEY REFERENCES [dbo].[User](ID),
     [RaceID] [int] FOREIGN KEY REFERENCES [dbo].[Race](ID),
@@ -127,7 +142,9 @@ GO
 CREATE TABLE [dbo].[Document](
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY,
     [Document] [varchar](250) NOT NULL,
-    [TypeID] [int] FOREIGN KEY REFERENCES [dbo].[DocumentType](ID),
+    CV VARCHAR(250) ,
+    IDDocument VARCHAR(250) ,
+    Transcript VARCHAR(250) ,
     [RequestID] [int] FOREIGN KEY REFERENCES [dbo].[StudentFundRequest](ID),
 )
 GO
@@ -141,3 +158,34 @@ CREATE TABLE [dbo].[StudentFundAllocation](
 )
 GO
 
+SELECT * FROM [dbo].[Status]
+SELECT * FROM [dbo].[Provinces]
+SELECT * FROM [dbo].[Race]
+SELECT * FROM [dbo].[DocumentType]
+SELECT * FROM [dbo].[Role]
+SELECT * FROM [dbo].[ContactDetails]
+SELECT * FROM [dbo].[University]
+SELECT * FROM [dbo].[UniversityFundRequest]
+SELECT * FROM [dbo].[BBDAllocation]
+SELECT * FROM [dbo].[UniversityFundAllocation]
+SELECT * FROM [dbo].[User]
+SELECT * FROM [dbo].[UserRole]
+SELECT * FROM [dbo].[UniversityUser]
+SELECT * FROM [dbo].[Gender]
+SELECT * FROM [dbo].[Student]
+SELECT * FROM [dbo].[UniversityStudentInformation]
+SELECT * FROM [dbo].[StudentFundRequest]
+SELECT * FROM [dbo].[Document]
+SELECT * FROM [dbo].[StudentFundAllocation]
+
+drop table [dbo].[UniversityFundRequest]
+--delete from  [dbo].[BBDAllocation] 
+--DELETE  FROM [dbo].[User] where ID = 14
+--insert into [dbo].[UniversityUser] (UniversityID,UserID) VALUES (6,14);
+--DELETE FROM [dbo].[ContactDetails] WHERE Email = 'mxsibay022@student.wethinkcode.co.za'
+--SELECT * FROM [dbo].[UniversityUser]
+--INNER JOIN [dbo].[User] ON [dbo].[User].ID = [dbo].[UniversityUser].UserID
+--INNER JOIN ContactDetails ON  ContactDetails.ID = [dbo].[User].ContactID
+--INNER JOIN  [dbo].[University] ON [dbo].[UniversityUser].UniversityID = [dbo].[University].ID
+
+--SELECT usr.ID, FirstName, LastName,ContactDetails.ID, PhoneNumber, Email FROM [dbo].[User] as usr INNER JOIN ContactDetails ON ContactDetails.Email='mxsibay022@student.wethinkcode.co.za' AND ContactDetails.ID = usr.ContactID

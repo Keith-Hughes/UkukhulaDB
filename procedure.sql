@@ -162,3 +162,16 @@ CREATE PROCEDURE [dbo].[usp_UpdateUniversityFundRequest]
 	END;
 
 
+CREATE FUNCTION dbo.fn_GetTotalBudgetForYear(@BBDAllocationID INT, @Year INT)
+RETURNS MONEY
+AS
+BEGIN
+    DECLARE @TotalBudget MONEY;
+
+    SELECT @TotalBudget = SUM(Budget)
+    FROM UniversityFundAllocation
+    WHERE BBDAllocationID = @BBDAllocationID
+    AND YEAR(DateAllocated) = @Year;
+
+    RETURN @TotalBudget;
+END;
