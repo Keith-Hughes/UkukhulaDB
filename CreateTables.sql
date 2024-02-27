@@ -133,9 +133,11 @@ CREATE TABLE [dbo].[StudentFundRequest] (
     [Amount] [money] NOT NULL,
     [CreatedDate] [date] DEFAULT GETDATE(),
     [ModifiedDate] [date] DEFAULT GETDATE(),
-    [StatusID] [int] FOREIGN KEY REFERENCES [dbo].[Status],
+    [StatusID] [int] FOREIGN KEY REFERENCES [dbo].[Status]  DEFAULT 3,
     [Comment] [varchar](255) NOT NULL,
-    [StudentID] [int] FOREIGN KEY REFERENCES [dbo].[Student](ID)
+    [StudentID] [int] FOREIGN KEY REFERENCES [dbo].[Student](ID),
+    [UniversityFundID][int] FOREIGN KEY REFERENCES [dbo].[UniversityFundAllocation](ID),
+    CONSTRAINT CHK_GradeGreaterThan80 CHECK (Grade > 80)
 )
 GO
 
@@ -178,7 +180,12 @@ SELECT * FROM [dbo].[StudentFundRequest]
 SELECT * FROM [dbo].[Document]
 SELECT * FROM [dbo].[StudentFundAllocation]
 
-drop table [dbo].[UniversityFundRequest]
+--INSERT INTO  [dbo].[UniversityFundAllocation]  (Budget, UniversityID,BBDAllocationID) VALUES(150,1,5) 
+--delete from [dbo].[UniversityFundAllocation] where ID = 20
+--drop table [dbo].[StudentFundRequest]
+--drop table [dbo].[StudentFundAllocation]
+--drop table [dbo].[Document]
+
 --delete from  [dbo].[BBDAllocation] 
 --DELETE  FROM [dbo].[User] where ID = 14
 --insert into [dbo].[UniversityUser] (UniversityID,UserID) VALUES (6,14);

@@ -1,5 +1,5 @@
-USE [UkukhulaDB]
-GO
+--USE [UkukhulaDB]
+--GO
 
 /****** Object:  StoredProcedure [dbo].[CreateStudentFundRequestForNewStudent]    Script Date: 2024/02/19 19:52:35 ******/
 SET ANSI_NULLS ON
@@ -19,7 +19,8 @@ CREATE PROCEDURE [dbo].[CreateStudentFundRequestForNewStudent]
     @BirthDate DATE,
     @Grade TINYINT,
     @Amount MONEY,
-    @UserId INT
+    @UserId INT,
+    @UniversityFundID
 )
 AS
 BEGIN
@@ -45,7 +46,7 @@ BEGIN
         VALUES (@UniversityID, @StudentID);
 
         INSERT INTO dbo.StudentFundRequest (Grade, Amount, StatusID, Comment, StudentID)
-        VALUES (@Grade, @Amount, 3, '', @StudentID);
+        VALUES (@Grade, @Amount, 3, '', @StudentID,@UniversityFundID);
 
         COMMIT TRANSACTION;
     END TRY
