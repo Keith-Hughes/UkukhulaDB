@@ -1,19 +1,22 @@
---USE master
---GO
+USE master
+GO
 
---CREATE DATABASE UkukhulaDB
---GO
+CREATE DATABASE UkukhulaDB
+GO
 
---USE UkukhulaDB
---GO
+USE UkukhulaDB
+GO
 
 CREATE TABLE [dbo].[Status](
 	[ID] [int] PRIMARY KEY IDENTITY(1, 1) NOT NULL,
 	[Type] [varchar](20) NOT NULL
 )
 GO
+CREATE TABLE [dbo].[Departments](
+    [DepartmentID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+    [Department] VARCHAR(80) NOT NULL
 
-
+)
 
 CREATE TABLE [dbo].[Provinces] (
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
@@ -87,6 +90,7 @@ CREATE TABLE [dbo].[User](
     [ID] [int] IDENTITY(1,1) PRIMARY KEY NOT NULL,
     [FirstName] [varchar](120) NOT NULL,
     [LastName] [varchar](120) NOT NULL,
+    [Status] [CHAR](8) DEFAULT 'ACTIVE',
     [ContactID] [int] FOREIGN KEY REFERENCES [dbo].[ContactDetails](ID)
 )
 GO
@@ -100,6 +104,7 @@ GO
 CREATE TABLE [dbo].[UniversityUser](
     [UniversityID] [int] FOREIGN KEY REFERENCES [dbo].[University](ID),
     [UserID] [int] FOREIGN KEY REFERENCES [dbo].[User](ID),
+    [DepartmentID] [int] FOREIGN KEY REFERENCES [dbo].[Departments](DepartmentID) DEFAULT  1
 )
 GO
 
@@ -117,6 +122,7 @@ CREATE TABLE [dbo].[Student] (
     [GenderID] [INT] FOREIGN KEY REFERENCES [dbo].[Gender](ID),
     [UserID] [int] FOREIGN KEY REFERENCES [dbo].[User](ID),
     [RaceID] [int] FOREIGN KEY REFERENCES [dbo].[Race](ID),
+    [DepartmentID] [int] FOREIGN KEY REFERENCES [dbo].[Departments](DepartmentID) DEFAULT  1
 )
 GO
 
@@ -161,6 +167,7 @@ CREATE TABLE [dbo].[StudentFundAllocation](
 GO
 
 SELECT * FROM [dbo].[Status]
+SELECT * FROM [dbo].[Departments]
 SELECT * FROM [dbo].[Provinces]
 SELECT * FROM [dbo].[Race]
 SELECT * FROM [dbo].[DocumentType]
@@ -179,8 +186,12 @@ SELECT * FROM [dbo].[UniversityStudentInformation]
 SELECT * FROM [dbo].[StudentFundRequest]
 SELECT * FROM [dbo].[Document]
 SELECT * FROM [dbo].[StudentFundAllocation]
+--insert into [dbo].[UniversityUser] (UniversityID,UserID)values (6,11)
+--delete from [dbo].[User] where ID =18
+--delete from [dbo].[ContactDetails] where ID =21
+--delete from [dbo].[UserRole] where UserID =18
 
---INSERT INTO  [dbo].[UniversityFundAllocation]  (Budget, UniversityID,BBDAllocationID) VALUES(150,1,5) 
+--INSERT INTO  [dbo].[UniversityFundAllocation]  (Budget, UniversityID,BBDAllocationID) VALUES(35000000,3,5) 
 --delete from [dbo].[UniversityFundAllocation] where ID = 20
 --drop table [dbo].[StudentFundRequest]
 --drop table [dbo].[StudentFundAllocation]

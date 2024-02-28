@@ -10,7 +10,7 @@ VALUES
     ('Free State'),
     ('Eastern Cape'),
     ('Northern Cape');
-
+GO
 
 INSERT INTO
     [dbo].[Role] ([RoleType])
@@ -18,6 +18,13 @@ VALUES
     ('BBD Admin'),
     ('University Admin'),
     ('Student');
+GO
+
+INSERT INTO [dbo].[Departments](Department)
+VALUES
+('Computer Science'),
+('Engineering'),
+('Game Development')
 GO
 
 INSERT INTO

@@ -9,6 +9,20 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+CREATE FUNCTION dbo.fn_GetTotalBudgetForYear(@BBDAllocationID INT, @Year INT)
+RETURNS MONEY
+AS
+BEGIN
+    DECLARE @TotalBudget MONEY;
+
+    SELECT @TotalBudget = SUM(Budget)
+    FROM UniversityFundAllocation
+    WHERE BBDAllocationID = @BBDAllocationID
+    AND YEAR(DateAllocated) = @Year;
+
+    RETURN @TotalBudget;
+END;
+GO
 
 CREATE PROCEDURE [dbo].[CreateStudentFundRequestForNewStudent]
 (
@@ -20,7 +34,7 @@ CREATE PROCEDURE [dbo].[CreateStudentFundRequestForNewStudent]
     @Grade TINYINT,
     @Amount MONEY,
     @UserId INT,
-    @UniversityFundID
+    @UniversityFundID INT
 )
 AS
 BEGIN
@@ -45,7 +59,7 @@ BEGIN
         INSERT INTO dbo.UniversityStudentInformation (UniversityID, StudentID)
         VALUES (@UniversityID, @StudentID);
 
-        INSERT INTO dbo.StudentFundRequest (Grade, Amount, StatusID, Comment, StudentID)
+        INSERT INTO dbo.StudentFundRequest (Grade, Amount, StatusID, Comment, StudentID,UniversityFundID)
         VALUES (@Grade, @Amount, 3, '', @StudentID,@UniversityFundID);
 
         COMMIT TRANSACTION;
@@ -58,6 +72,7 @@ BEGIN
 END
 
 GO
+
 CREATE PROCEDURE [dbo].[GetStudentFundRequests]
 AS
 BEGIN
@@ -97,6 +112,7 @@ END;
 
 GO
 
+
 CREATE PROCEDURE [dbo].[usp_NewUniversityFundRequest] 
     @UniversityID INT, 
     @Amount DECIMAL(18,2),
@@ -134,6 +150,7 @@ END;
 GO
 
 
+
 CREATE PROCEDURE [dbo].[usp_UpdateUniversityFundRequest] 
 	@RequestID INT,  
 	@StatusID INT
@@ -164,21 +181,8 @@ CREATE PROCEDURE [dbo].[usp_UpdateUniversityFundRequest]
 		WHERE 
 			UniversityFundRequest.ID = @RequestID;
 	END;
+GO
 
-
-CREATE FUNCTION dbo.fn_GetTotalBudgetForYear(@BBDAllocationID INT, @Year INT)
-RETURNS MONEY
-AS
-BEGIN
-    DECLARE @TotalBudget MONEY;
-
-    SELECT @TotalBudget = SUM(Budget)
-    FROM UniversityFundAllocation
-    WHERE BBDAllocationID = @BBDAllocationID
-    AND YEAR(DateAllocated) = @Year;
-
-    RETURN @TotalBudget;
-END;
 
 CREATE PROCEDURE [dbo].[GetStudentFundRequestsByUniversity]
 @UniversitID INT
