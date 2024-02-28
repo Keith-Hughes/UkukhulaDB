@@ -1,6 +1,7 @@
 CREATE VIEW [dbo].[vw_UniversityRequests] AS
 
-	SELECT 
+SELECT
+	UniversityFundRequest.[ID] AS RequestID,
         University.[Name] AS University, 
         Provinces.ProvinceName AS Province, 
         UniversityFundRequest.Amount,
@@ -15,5 +16,5 @@ CREATE VIEW [dbo].[vw_UniversityRequests] AS
         Provinces ON University.ProvinceID = Provinces.ID
     INNER JOIN 
         [dbo].[Status] ON UniversityFundRequest.StatusID = [dbo].[Status].ID
-
 GO
+
