@@ -144,6 +144,7 @@ CREATE PROCEDURE [dbo].[usp_UpdateUniversityFundRequest]
 		WHERE ID = @RequestID;
 
 		SELECT 
+			UniversityFundRequest.[ID] AS RequestID,
 			University.[Name] AS University, 
 			Provinces.ProvinceName AS Province, 
 			UniversityFundRequest.Amount,
