@@ -66,8 +66,8 @@ INSERT INTO [dbo].[UserRole] ([UserID], [RoleID])
 VALUES
     (1, 3),
     (2, 1),
-    (3, 2),
-    (4, 3),
+    (3, 1),
+    (4, 1),
     (5, 1),
     (6, 2),
     (7, 3),

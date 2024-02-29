@@ -54,6 +54,7 @@ CREATE TABLE [dbo].[University](
     [Name] [varchar](120),
     [ProvinceID] [int] FOREIGN KEY REFERENCES [dbo].[Provinces](ID),
     [Status] [CHAR](8) DEFAULT 'INACTIVE'
+    CONSTRAINT chk_Status CHECK (Status IN ('ACTIVE', 'INACTIVE'))
 )
 GO
 
@@ -172,11 +173,11 @@ SELECT * FROM [dbo].[Provinces]
 SELECT * FROM [dbo].[Race]
 SELECT * FROM [dbo].[DocumentType]
 SELECT * FROM [dbo].[Role]
-SELECT * FROM [dbo].[ContactDetails]
 SELECT * FROM [dbo].[University]
 SELECT * FROM [dbo].[UniversityFundRequest]
 SELECT * FROM [dbo].[BBDAllocation]
 SELECT * FROM [dbo].[UniversityFundAllocation]
+SELECT * FROM [dbo].[ContactDetails]
 SELECT * FROM [dbo].[User]
 SELECT * FROM [dbo].[UserRole]
 SELECT * FROM [dbo].[UniversityUser]
@@ -186,10 +187,13 @@ SELECT * FROM [dbo].[UniversityStudentInformation]
 SELECT * FROM [dbo].[StudentFundRequest]
 SELECT * FROM [dbo].[Document]
 SELECT * FROM [dbo].[StudentFundAllocation]
+
+--Update [dbo].[User] SET Status = 'ACTIVE' where ID = 11
 --insert into [dbo].[UniversityUser] (UniversityID,UserID)values (6,11)
---delete from [dbo].[User] where ID =18
---delete from [dbo].[ContactDetails] where ID =21
---delete from [dbo].[UserRole] where UserID =18
+
+--delete from [dbo].[UserRole] where UserID =13
+--delete from [dbo].[User] where ID =13
+--delete from [dbo].[ContactDetails] where ID =23
 
 --INSERT INTO  [dbo].[UniversityFundAllocation]  (Budget, UniversityID,BBDAllocationID) VALUES(35000000,3,5) 
 --delete from [dbo].[UniversityFundAllocation] where ID = 20
