@@ -75,14 +75,19 @@ END;
 
 GO
 
-CREATE TRIGGER trg_ChangeUniversityStatus
+CREATE TRIGGER trg_UniversityFundAllocation_Insert
 ON [dbo].[UniversityFundAllocation]
-AFTER INSERT, UPDATE
+AFTER INSERT
 AS
 BEGIN
-
-END
+    UPDATE [dbo].[University]
+    SET [Status] = 'ACTIVE'
+    FROM [dbo].[University] u
+    INNER JOIN inserted i ON u.ID = i.UniversityID;
+END;
 GO
+
+
 
 CREATE TRIGGER trg_CheckUniversityFundAllocation
 ON [dbo].[StudentFundRequest]
@@ -111,11 +116,14 @@ BEGIN
         FROM [dbo].[UniversityFundAllocation]
         WHERE ID = @UniversityFundID;
 
+       
+      
         IF @TotalRequestedMoney > @RemainingBudget
         BEGIN
             RAISERROR ('Insufficient funds in UniversityFundAllocation for UniversityFundID %d.', 16, 1, @UniversityFundID);
             ROLLBACK TRANSACTION;
             RETURN;
         END;
+     
     END;
 END;
