@@ -20,7 +20,7 @@ CREATE PROCEDURE [dbo].[CreateStudentFundRequestForNewStudent]
     @Grade TINYINT,
     @Amount MONEY,
     @UserId INT,
-    @UniversityFundID
+    @UniversityFundID INT
 )
 AS
 BEGIN
@@ -45,7 +45,7 @@ BEGIN
         INSERT INTO dbo.UniversityStudentInformation (UniversityID, StudentID)
         VALUES (@UniversityID, @StudentID);
 
-        INSERT INTO dbo.StudentFundRequest (Grade, Amount, StatusID, Comment, StudentID)
+        INSERT INTO dbo.StudentFundRequest (Grade, Amount, StatusID, Comment, StudentID, UniversityFundID)
         VALUES (@Grade, @Amount, 3, '', @StudentID,@UniversityFundID);
 
         COMMIT TRANSACTION;
