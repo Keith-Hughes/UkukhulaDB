@@ -51,11 +51,3 @@ VALUES
     ('Other');
 GO
 
-INSERT INTO
-    [dbo].[DocumentType] ([Type])
-VALUES
-    ('CV'),
-    ('Transcript'),
-    ('Motivation'),
-    ('ID');
-GO

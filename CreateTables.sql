@@ -30,11 +30,6 @@ CREATE TABLE [dbo].[Race] (
 )
 GO
 
-CREATE TABLE [dbo].[DocumentType] (
-    [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
-    [Type] [varchar](20) NOT NULL
-)
-GO
 
 CREATE TABLE [dbo].[Role] (
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
@@ -150,7 +145,6 @@ GO
 
 CREATE TABLE [dbo].[Document](
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY,
-    [Document] [varchar](250) NOT NULL,
     CV VARCHAR(250) ,
     IDDocument VARCHAR(250) ,
     Transcript VARCHAR(250) ,
@@ -167,26 +161,25 @@ CREATE TABLE [dbo].[StudentFundAllocation](
 )
 GO
 
-SELECT * FROM [dbo].[Status]
-SELECT * FROM [dbo].[Departments]
-SELECT * FROM [dbo].[Provinces]
-SELECT * FROM [dbo].[Race]
-SELECT * FROM [dbo].[DocumentType]
-SELECT * FROM [dbo].[Role]
-SELECT * FROM [dbo].[University]
-SELECT * FROM [dbo].[UniversityFundRequest]
-SELECT * FROM [dbo].[BBDAllocation]
-SELECT * FROM [dbo].[UniversityFundAllocation]
-SELECT * FROM [dbo].[ContactDetails]
-SELECT * FROM [dbo].[User]
-SELECT * FROM [dbo].[UserRole]
-SELECT * FROM [dbo].[UniversityUser]
-SELECT * FROM [dbo].[Gender]
-SELECT * FROM [dbo].[Student]
-SELECT * FROM [dbo].[UniversityStudentInformation]
-SELECT * FROM [dbo].[StudentFundRequest]
-SELECT * FROM [dbo].[Document]
-SELECT * FROM [dbo].[StudentFundAllocation]
+-- SELECT * FROM [dbo].[Status]
+-- SELECT * FROM [dbo].[Departments]
+-- SELECT * FROM [dbo].[Provinces]
+-- SELECT * FROM [dbo].[Race]
+-- SELECT * FROM [dbo].[Role]
+-- SELECT * FROM [dbo].[University]
+-- SELECT * FROM [dbo].[UniversityFundRequest]
+-- SELECT * FROM [dbo].[BBDAllocation]
+-- SELECT * FROM [dbo].[UniversityFundAllocation]
+-- SELECT * FROM [dbo].[ContactDetails]
+-- SELECT * FROM [dbo].[User]
+-- SELECT * FROM [dbo].[UserRole]
+-- SELECT * FROM [dbo].[UniversityUser]
+-- SELECT * FROM [dbo].[Gender]
+-- SELECT * FROM [dbo].[Student]
+-- SELECT * FROM [dbo].[UniversityStudentInformation]
+-- SELECT * FROM [dbo].[StudentFundRequest]
+-- SELECT * FROM [dbo].[Document]
+-- SELECT * FROM [dbo].[StudentFundAllocation]
 
 --Update [dbo].[User] SET Status = 'ACTIVE' where ID = 11
 --insert into [dbo].[UniversityUser] (UniversityID,UserID)values (6,11)
