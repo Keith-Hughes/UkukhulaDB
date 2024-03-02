@@ -80,10 +80,16 @@ ON [dbo].[UniversityFundAllocation]
 AFTER INSERT
 AS
 BEGIN
-    UPDATE [dbo].[University]
-    SET [Status] = 'ACTIVE'
-    FROM [dbo].[University] u
-    INNER JOIN inserted i ON u.ID = i.UniversityID;
+    DECLARE @AllocationYear INT
+    SELECT @AllocationYear = YEAR([DateCreated]) FROM inserted
+    
+    IF @AllocationYear = YEAR(GETDATE())
+    BEGIN
+        UPDATE u
+        SET u.[Status] = 'ACTIVE'
+        FROM [dbo].[University] u
+        INNER JOIN inserted i ON u.ID = i.UniversityID;
+    END
 END;
 GO
 

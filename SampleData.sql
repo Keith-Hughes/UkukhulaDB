@@ -95,7 +95,7 @@ INSERT INTO[dbo].[UniversityFundRequest](
         [Comment]
     )
 VALUES
-    (3, '2021-03-01', 120000, 1,  'Approved'),
+    (18, '2020-03-01', 120000, 3,  ''),
     (7,'2021-05-01',80000,2,'Rejected - Insufficient documentation' ),
     (12, '2021-08-01', 150000, 3, ''),
     (5, '2021-11-01', 100000, 1, 'Approved'),

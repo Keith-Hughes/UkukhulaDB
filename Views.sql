@@ -28,3 +28,11 @@ INNER JOIN [dbo].[UniversityUser] ON [dbo].[UniversityUser].[UserID] = [dbo].[Us
 INNER JOIN [dbo].[University] ON [dbo].[UniversityUser].[UniversityID] = [dbo].[University].[ID]
 
 GO
+
+CREATE VIEW [dbo].[vw_getMoneySpent]
+AS
+SELECT SUM(UFA.Budget) AS MoneySpent
+FROM [dbo].[UniversityFundAllocation] UFA
+INNER JOIN [dbo].[BBDAllocation] BBD ON UFA.BBDAllocationID = BBD.ID
+WHERE YEAR(UFA.DateAllocated) = YEAR(GETDATE()) 
+
