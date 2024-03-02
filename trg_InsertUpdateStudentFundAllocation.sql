@@ -81,7 +81,7 @@ AFTER INSERT
 AS
 BEGIN
     DECLARE @AllocationYear INT
-    SELECT @AllocationYear = YEAR([DateCreated]) FROM inserted
+    SELECT @AllocationYear = YEAR([DateAllocated]) FROM inserted
     
     IF @AllocationYear = YEAR(GETDATE())
     BEGIN
