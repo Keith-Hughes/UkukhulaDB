@@ -61,6 +61,10 @@ BEGIN
 
         INSERT INTO dbo.StudentFundRequest (Grade, Amount, StatusID, Comment, StudentID,UniversityFundID)
         VALUES (@Grade, @Amount, 3, '', @StudentID,@UniversityFundID);
+        SET @RequestID = SCOPE_IDENTITY();
+
+        INSERT INTO dbo.Document (RequestID)
+        VALUES (@RequestID); 
 
         COMMIT TRANSACTION;
     END TRY
