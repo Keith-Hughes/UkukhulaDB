@@ -45,6 +45,7 @@ BEGIN
         DECLARE @StatusID INT;
         DECLARE @GenderID INT;
         DECLARE @RaceID INT;
+        DECLARE @RequestID INT;
 
         
 
