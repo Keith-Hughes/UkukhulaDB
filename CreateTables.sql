@@ -145,9 +145,9 @@ GO
 
 CREATE TABLE [dbo].[Document](
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY,
-    CV varbinary(max) DEFAULT 0,
-    IDDocument varbinary(max) DEFAULT 0,
-    Transcript varbinary(max) DEFAULT 0,
+    CV varbinary(max) NULL,
+    IDDocument varbinary(max) NULL,
+    Transcript varbinary(max) NULL,
     [RequestID] [int] FOREIGN KEY REFERENCES [dbo].[StudentFundRequest](ID),
 )
 GO
