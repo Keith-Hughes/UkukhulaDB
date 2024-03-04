@@ -232,3 +232,47 @@ BEGIN
 END;
 
 GO
+
+
+CREATE PROCEDURE [dbo].[allocateAUniversity]
+@RequestID int,
+@Amount money
+AS
+BEGIN
+DECLARE @UniversityID int
+DECLARE @BBDAllocationID int
+
+SELECT  @UniversityID =   UniversityID FROM [dbo].[UniversityFundRequest]  WHERE ID = @RequestID
+SELECT  @BBDAllocationID =   ID FROM [dbo].[BBDAllocation] WHERE YEAR(DateCreated) = Year(GETDATE())
+UPDATE [dbo].[UniversityFundRequest]
+SET Amount = @Amount WHERE ID = @RequestID
+UPDATE [dbo].[UniversityFundRequest]
+SET StatusID = 1 WHERE ID = @RequestID
+
+
+INSERT INTO [dbo].[UniversityFundAllocation](Budget,UniversityID,BBDAllocationID) VALUES (@Amount,@UniversityID,@BBDAllocationID)
+END
+GO
+
+--EXEC [dbo].[allocateAUniversity] 54, 120000
+
+CREATE PROCEDURE [dbo].[ResetAllocations]
+AS
+BEGIN
+ DELETE FROM [dbo].[StudentFundAllocation]
+    WHERE YEAR(DateCreated) = YEAR(GETDATE())
+
+
+    DELETE FROM [dbo].[StudentFundRequest]
+    WHERE YEAR(CreatedDate) = YEAR(GETDATE())
+
+    DELETE FROM [dbo].[UniversityFundAllocation]
+    FROM [dbo].[UniversityFundAllocation]
+    LEFT JOIN [dbo].[StudentFundRequest] ON [dbo].[UniversityFundAllocation].[ID] = [dbo].[StudentFundRequest].[UniversityFundID]
+    WHERE YEAR([dbo].[UniversityFundAllocation].DateAllocated) = YEAR(GETDATE())
+
+END
+GO
+
+
+EXEC [dbo].[ResetAllocations]

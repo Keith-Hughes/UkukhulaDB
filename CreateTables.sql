@@ -1,11 +1,11 @@
-USE master
-GO
+--USE master
+--GO
 
-CREATE DATABASE UkukhulaDB
-GO
+--CREATE DATABASE UkukhulaDB
+--GO
 
-USE UkukhulaDB
-GO
+--USE UkukhulaDB
+--GO
 
 CREATE TABLE [dbo].[Status](
 	[ID] [int] PRIMARY KEY IDENTITY(1, 1) NOT NULL,
@@ -26,14 +26,14 @@ GO
 
 CREATE TABLE [dbo].[Race] (
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
-    [RaceName] [varchar](8) NOT NULL
+    [RaceName] [varchar](8) NOT NULL,
 )
 GO
 
 
 CREATE TABLE [dbo].[Role] (
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY NOT NULL,
-    [RoleType] [varchar](20) NOT NULL
+    [RoleType] [varchar](20) NOT NULL,
 )
 GO
 
@@ -49,7 +49,7 @@ CREATE TABLE [dbo].[University](
     [Name] [varchar](120),
     [ProvinceID] [int] FOREIGN KEY REFERENCES [dbo].[Provinces](ID),
     [Status] [CHAR](8) DEFAULT 'INACTIVE'
-    CONSTRAINT chk_Status CHECK (Status IN ('ACTIVE', 'INACTIVE'))
+    CONSTRAINT chk_Status CHECK (Status IN ('ACTIVE', 'INACTIVE')),
 )
 GO
 
@@ -60,7 +60,7 @@ CREATE TABLE [dbo].[UniversityFundRequest](
     [DateCreated] [date] DEFAULT GETDATE(),
     [Amount] [money] NOT NULL,
     [StatusID] [int] FOREIGN KEY REFERENCES [dbo].[Status](ID),
-    [Comment] [varchar](255)
+    [Comment] [varchar](255),
 )
 GO
 
@@ -76,7 +76,7 @@ CREATE TABLE [dbo].[UniversityFundAllocation](
     [Budget] [money],
     [DateAllocated] [date] DEFAULT GETDATE(),
     [UniversityID] [int] FOREIGN KEY REFERENCES [dbo].[University](ID),
-    [BBDAllocationID] [int] FOREIGN KEY REFERENCES [dbo].[BBDAllocation](ID)
+    [BBDAllocationID] [int] FOREIGN KEY REFERENCES [dbo].[BBDAllocation](ID),
 )
 GO
 
@@ -87,20 +87,20 @@ CREATE TABLE [dbo].[User](
     [FirstName] [varchar](120) NOT NULL,
     [LastName] [varchar](120) NOT NULL,
     [Status] [CHAR](8) DEFAULT 'ACTIVE',
-    [ContactID] [int] FOREIGN KEY REFERENCES [dbo].[ContactDetails](ID)
+    [ContactID] [int] FOREIGN KEY REFERENCES [dbo].[ContactDetails](ID),
 )
 GO
 
 CREATE TABLE [dbo].[UserRole](
     [UserID] [int] FOREIGN KEY REFERENCES [dbo].[User](ID),
-    [RoleID] [int] FOREIGN KEY REFERENCES [dbo].[Role](ID)
+    [RoleID] [int] FOREIGN KEY REFERENCES [dbo].[Role](ID),
 )
 GO
 
 CREATE TABLE [dbo].[UniversityUser](
     [UniversityID] [int] FOREIGN KEY REFERENCES [dbo].[University](ID),
     [UserID] [int] FOREIGN KEY REFERENCES [dbo].[User](ID),
-    [DepartmentID] [int] FOREIGN KEY REFERENCES [dbo].[Departments](DepartmentID) DEFAULT  1
+    [DepartmentID] [int] FOREIGN KEY REFERENCES [dbo].[Departments](DepartmentID) DEFAULT  1,
 )
 GO
 
@@ -118,7 +118,9 @@ CREATE TABLE [dbo].[Student] (
     [GenderID] [INT] FOREIGN KEY REFERENCES [dbo].[Gender](ID),
     [UserID] [int] FOREIGN KEY REFERENCES [dbo].[User](ID),
     [RaceID] [int] FOREIGN KEY REFERENCES [dbo].[Race](ID),
-    [DepartmentID] [int] FOREIGN KEY REFERENCES [dbo].[Departments](DepartmentID) DEFAULT  1
+    [DepartmentID] [int] FOREIGN KEY REFERENCES [dbo].[Departments](DepartmentID) DEFAULT  1,
+    CONSTRAINT chk_age CHECK(Year(Birthdate) <2007),
+    CONSTRAINT chk_ageGreater CHECK(Year(Birthdate) >1988),
 )
 GO
 
@@ -139,7 +141,10 @@ CREATE TABLE [dbo].[StudentFundRequest] (
     [Comment] [varchar](255) NOT NULL,
     [StudentID] [int] FOREIGN KEY REFERENCES [dbo].[Student](ID),
     [UniversityFundID][int] FOREIGN KEY REFERENCES [dbo].[UniversityFundAllocation](ID),
-    CONSTRAINT CHK_GradeGreaterThan80 CHECK (Grade > 80)
+    CONSTRAINT CHK_GradeGreaterThan80 CHECK (Grade > 80),
+    CONSTRAINT CHK_Amount CHECK (Amount > 0),
+    CONSTRAINT CHK_AmountLess CHECK (Amount < 125001),
+
 )
 GO
 
@@ -161,25 +166,26 @@ CREATE TABLE [dbo].[StudentFundAllocation](
 )
 GO
 
--- SELECT * FROM [dbo].[Status]
--- SELECT * FROM [dbo].[Departments]
--- SELECT * FROM [dbo].[Provinces]
--- SELECT * FROM [dbo].[Race]
--- SELECT * FROM [dbo].[Role]
--- SELECT * FROM [dbo].[University]
--- SELECT * FROM [dbo].[UniversityFundRequest]
--- SELECT * FROM [dbo].[BBDAllocation]
--- SELECT * FROM [dbo].[UniversityFundAllocation]
--- SELECT * FROM [dbo].[ContactDetails]
--- SELECT * FROM [dbo].[User]
--- SELECT * FROM [dbo].[UserRole]
--- SELECT * FROM [dbo].[UniversityUser]
--- SELECT * FROM [dbo].[Gender]
--- SELECT * FROM [dbo].[Student]
--- SELECT * FROM [dbo].[UniversityStudentInformation]
--- SELECT * FROM [dbo].[StudentFundRequest]
--- SELECT * FROM [dbo].[Document]
--- SELECT * FROM [dbo].[StudentFundAllocation]
+ SELECT * FROM [dbo].[Status]
+ SELECT * FROM [dbo].[Departments]
+ SELECT * FROM [dbo].[Provinces]
+ SELECT * FROM [dbo].[Race]
+ SELECT * FROM [dbo].[Role]
+ SELECT * FROM [dbo].[University]
+ SELECT * FROM [dbo].[UniversityFundRequest]
+ SELECT * FROM [dbo].[BBDAllocation]
+ SELECT * FROM [dbo].[UniversityFundAllocation]
+ SELECT * FROM [dbo].[ContactDetails]
+ SELECT * FROM [dbo].[User]
+ SELECT * FROM [dbo].[UserRole]
+ SELECT * FROM [dbo].[UniversityUser]
+ SELECT * FROM [dbo].[Gender]
+ SELECT * FROM [dbo].[Student]
+ SELECT * FROM [dbo].[UniversityStudentInformation]
+ SELECT * FROM [dbo].[StudentFundRequest]
+ SELECT * FROM [dbo].[Document]
+ SELECT * FROM [dbo].[StudentFundAllocation]
+
 
 --Update [dbo].[User] SET Status = 'ACTIVE' where ID = 11
 --insert into [dbo].[UniversityUser] (UniversityID,UserID)values (6,11)
@@ -204,3 +210,4 @@ GO
 --INNER JOIN  [dbo].[University] ON [dbo].[UniversityUser].UniversityID = [dbo].[University].ID
 
 --SELECT usr.ID, FirstName, LastName,ContactDetails.ID, PhoneNumber, Email FROM [dbo].[User] as usr INNER JOIN ContactDetails ON ContactDetails.Email='mxsibay022@student.wethinkcode.co.za' AND ContactDetails.ID = usr.ContactID
+
