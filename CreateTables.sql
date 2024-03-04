@@ -157,10 +157,11 @@ CREATE TABLE [dbo].[Document](
 )
 GO
 
-CREATE TABLE Tokens (
+CREATE TABLE [dbo].[Tokens] (
     Token VARCHAR(255) PRIMARY KEY,
     ExpirationDate DATETIME
-);
+)
+GO
 
 CREATE TABLE [dbo].[StudentFundAllocation](
     [ID] [int] IDENTITY(1, 1) PRIMARY KEY,
