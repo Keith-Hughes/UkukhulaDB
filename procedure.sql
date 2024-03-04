@@ -68,6 +68,7 @@ BEGIN
         VALUES (@RequestID); 
 
         COMMIT TRANSACTION;
+        RETURN @RequestID
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
