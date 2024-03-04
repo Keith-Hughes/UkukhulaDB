@@ -18,9 +18,11 @@ SELECT
         [dbo].[Status] ON UniversityFundRequest.StatusID = [dbo].[Status].ID
 GO
 
+-- DROP VIEW [dbo].[GetAllUsers]
+
 CREATE VIEW [dbo].[GetAllUsers] AS
 
-SELECT [dbo].[University].[Name] , FirstName,LastName,PhoneNumber,Email,[dbo].[User].[Status] 
+SELECT [dbo].[User].ID, [dbo].[University].[Name] , FirstName,LastName,PhoneNumber,Email,[dbo].[User].[Status] 
 
 FROM [dbo].[User] 
 INNER JOIN [dbo].[ContactDetails] ON [dbo].[ContactDetails].[ID] = [dbo].[User].[ContactID]
@@ -29,10 +31,15 @@ INNER JOIN [dbo].[University] ON [dbo].[UniversityUser].[UniversityID] = [dbo].[
 
 GO
 
+
 CREATE VIEW [dbo].[vw_getMoneySpent]
 AS
 SELECT SUM(UFA.Budget) AS MoneySpent
 FROM [dbo].[UniversityFundAllocation] UFA
 INNER JOIN [dbo].[BBDAllocation] BBD ON UFA.BBDAllocationID = BBD.ID
 WHERE YEAR(UFA.DateAllocated) = YEAR(GETDATE()) 
+GO
 
+SELECT * FROM [dbo].[GetAllUsers]
+
+SELECT * FROM [dbo].[GetAllUsers]

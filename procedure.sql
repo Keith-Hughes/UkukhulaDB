@@ -121,37 +121,57 @@ GO
 
 
 CREATE PROCEDURE [dbo].[usp_NewUniversityFundRequest] 
-    @UniversityID INT, 
-    @Amount DECIMAL(18,2),
-    @Comment NVARCHAR(1000)
+    @UniversityName VARCHAR (100), 
+    @Amount MONEY,
+    @FirstName VARCHAR (100),
+    @Lastname VARCHAR (100),
+    @ContactNumber VARCHAR (100),
+    @Email VARCHAR (100),
+	@Province VARCHAR (50)
+   
 AS
 BEGIN
     SET NOCOUNT ON;
+	
+	DECLARE @ContactID INT
+	DECLARE @UserID INT
+	DECLARE @UniversityID INT
 
+	INSERT INTO [dbo].[ContactDetails](Email,PhoneNumber) VALUES (@Email,@ContactNumber);
+
+	SET @ContactID= SCOPE_IDENTITY();
+	
+	INSERT INTO [dbo].[User](FirstName,LastName,[Status],ContactID) VALUES (@FirstName,@Lastname,'INACTIVE',@ContactID);
+
+	SET @UserID = SCOPE_IDENTITY();
+	INSERT INTO [dbo].[UserRole](UserID,RoleID) VALUES (@UserID,2);
+
+	INSERT INTO [dbo].[University]
+	SELECT @UniversityID = ID FROM [dbo].[University] WHERE [Name] = @UniversityName 
     -- Insert the new request into the UniversityFundRequest table
-    INSERT INTO UniversityFundRequest (UniversityID, Amount, DateCreated, Comment, StatusID)
-    VALUES (@UniversityID, @Amount, GETDATE(), @Comment, 3);
+    INSERT INTO UniversityFundRequest (UniversityID, DateCreated, Amount, StatusID, Comment)
+    VALUES (@UniversityID, GETDATE(),@Amount, 3,'');
 	DECLARE @RequestID INT;
 	SET @RequestID = SCOPE_IDENTITY();
     -- Return the inserted data
-    SELECT 
-	@RequestID AS RequestID,
-        University.[Name] AS University, 
-        Provinces.ProvinceName AS Province, 
-        UniversityFundRequest.Amount,
-        [dbo].[Status].[Type] AS [Status],
-        UniversityFundRequest.DateCreated,
-        UniversityFundRequest.Comment
-    FROM 
-        University 
-    INNER JOIN 
-        UniversityFundRequest ON University.ID = UniversityFundRequest.UniversityID
-    INNER JOIN 
-        Provinces ON University.ProvinceID = Provinces.ID
-    INNER JOIN 
-        [dbo].[Status] ON UniversityFundRequest.StatusID = [dbo].[Status].ID
-    WHERE 
-        University.ID = @UniversityID;
+ --   SELECT 
+	--@RequestID AS RequestID,
+ --       University.[Name] AS University, 
+ --       Provinces.ProvinceName AS Province, 
+ --       UniversityFundRequest.Amount,
+ --       [dbo].[Status].[Type] AS [Status],
+ --       UniversityFundRequest.DateCreated,
+ --       UniversityFundRequest.Comment
+ --   FROM 
+ --       University 
+ --   INNER JOIN 
+ --       UniversityFundRequest ON University.ID = UniversityFundRequest.UniversityID
+ --   INNER JOIN 
+ --       Provinces ON University.ProvinceID = Provinces.ID
+ --   INNER JOIN 
+ --       [dbo].[Status] ON UniversityFundRequest.StatusID = [dbo].[Status].ID
+ --   WHERE 
+ --       University.ID = @UniversityID;
 END;
 
 GO
@@ -232,3 +252,47 @@ BEGIN
 END;
 
 GO
+
+
+CREATE PROCEDURE [dbo].[allocateAUniversity]
+@RequestID int,
+@Amount money
+AS
+BEGIN
+DECLARE @UniversityID int
+DECLARE @BBDAllocationID int
+
+SELECT  @UniversityID =   UniversityID FROM [dbo].[UniversityFundRequest]  WHERE ID = @RequestID
+SELECT  @BBDAllocationID =   ID FROM [dbo].[BBDAllocation] WHERE YEAR(DateCreated) = Year(GETDATE())
+UPDATE [dbo].[UniversityFundRequest]
+SET Amount = @Amount WHERE ID = @RequestID
+UPDATE [dbo].[UniversityFundRequest]
+SET StatusID = 1 WHERE ID = @RequestID
+
+
+INSERT INTO [dbo].[UniversityFundAllocation](Budget,UniversityID,BBDAllocationID) VALUES (@Amount,@UniversityID,@BBDAllocationID)
+END
+GO
+
+--EXEC [dbo].[allocateAUniversity] 54, 120000
+
+CREATE PROCEDURE [dbo].[ResetAllocations]
+AS
+BEGIN
+ DELETE FROM [dbo].[StudentFundAllocation]
+    WHERE YEAR(DateCreated) = YEAR(GETDATE())
+
+
+    DELETE FROM [dbo].[StudentFundRequest]
+    WHERE YEAR(CreatedDate) = YEAR(GETDATE())
+
+    DELETE FROM [dbo].[UniversityFundAllocation]
+    FROM [dbo].[UniversityFundAllocation]
+    LEFT JOIN [dbo].[StudentFundRequest] ON [dbo].[UniversityFundAllocation].[ID] = [dbo].[StudentFundRequest].[UniversityFundID]
+    WHERE YEAR([dbo].[UniversityFundAllocation].DateAllocated) = YEAR(GETDATE())
+
+END
+GO
+
+
+EXEC [dbo].[ResetAllocations]
