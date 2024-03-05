@@ -100,7 +100,9 @@ BEGIN
         [Status].[Type] AS FundRequestStatus,
         [StudentFundRequest].[Comment],
         CASE
-            WHEN [Document].[CV] IS NULL OR [Document].[Transcript] IS NULL OR [Document].[IDDocument] IS NULL
+            WHEN [Document].[CV] IS NULL OR UPPER([Document].[CV]) = '0x00000000'
+             OR [Document].[Transcript] IS NULL OR UPPER([Document].[Transcript]) = '0x00000000'
+             OR [Document].[IDDocument] IS NULL OR UPPER([Document].[IDDocument]) = '0x00000000'
             THEN 'Pending Document'
             ELSE 'Received'
         END AS DocumentStatus
@@ -233,9 +235,11 @@ BEGIN
         [Status].[Type] AS FundRequestStatus,
         [StudentFundRequest].[Comment],
         CASE
-            WHEN [Document].[CV] IS NULL OR [Document].[Transcript] IS NULL OR [Document].[IDDocument] IS NULL
-            THEN 'Pending Document'
-            ELSE 'Received'
+            WHEN [Document].[CV] IS NULL OR UPPER([Document].[CV]) = '0x00000000'
+             OR [Document].[Transcript] IS NULL OR UPPER([Document].[Transcript]) = '0x00000000'
+             OR [Document].[IDDocument] IS NULL OR UPPER([Document].[IDDocument]) = '0x00000000'
+        THEN 'Pending Document'
+        ELSE 'Received'
         END AS DocumentStatus
     FROM
         [dbo].[StudentFundRequest]
